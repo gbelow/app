@@ -1,0 +1,27 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '10.0'
+project 'TritonApp.xcodeproj'
+target 'ColcciApp' do
+  config = use_native_modules!
+
+  use_react_native!(:path => config["reactNativePath"])
+
+  pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker'
+
+  target 'ColcciAppTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+end
+
+target 'ColcciApp-tvOS' do
+  # Pods for ColcciApp-tvOS
+
+  target 'ColcciApp-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+end

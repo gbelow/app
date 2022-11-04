@@ -1,0 +1,9 @@
+
+
+When pod install start to do: 
+`CocoaPods could not find compatible versions for pod "React/Core": [...]`
+
+Delete ios/Pods folder, delete podfile.lock, delete node_modules, 
+after yarn run in root folder:
+`grep -rl "s.dependency 'React/Core'" node_modules/ | xargs sed -i '' 's=React/Core=React-Core=g'`
+
