@@ -1,26 +1,27 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 // import FBSDK from 'react-native-fbsdk';
-import {Text, View, Image, Alert, Animated, Platform} from 'react-native';
+import { Text, View, Image, Alert, Animated, Platform } from "react-native";
 
 import {
   Button,
   FacebookButton,
   SettingsModal,
   LoginForm,
-} from '../../config/components';
+} from "../../config/components";
 
-import {Touch} from 'react-native-kin-ui';
-import {name, appId, mode} from '../../package.json';
+import { Touch } from "react-native-kin-ui";
+import { name, appId, mode } from "../../package.json";
 import {
   sessionFacebookLoginRequest,
   sessionFormLoginRequest,
-} from '../../actions/sessionActions';
-import {settingsSubmitRequest} from '../../actions/settingsActions';
-import theme from '../../const/theme';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import images from '../../const/images';
-import styles from './styles';
+} from "../../actions/sessionActions";
+import { settingsSubmitRequest } from "../../actions/settingsActions";
+import theme from "../../const/theme";
+import Icon from "react-native-vector-icons/FontAwesome";
+import images from "../../const/images";
+import Sales from "../Sales";
+import styles from "./styles";
 
 // const {
 //   GraphRequest,
@@ -30,7 +31,7 @@ import styles from './styles';
 class Login extends React.Component {
   static navigationOptions = () => ({
     header: null,
-    drawerLockMode: 'locked-closed',
+    drawerLockMode: "locked-closed",
   });
 
   state = {
@@ -54,7 +55,7 @@ class Login extends React.Component {
   }
 
   enterWithoutLogin() {
-    this.props.navigation.navigate('HomePublic');
+    this.props.navigation.navigate("HomePublic");
   }
 
   // /**
@@ -137,7 +138,7 @@ class Login extends React.Component {
    * @return {Void}
    */
   afterLoginWithError = () => {
-    Alert.alert('Ooops', 'Ocorreu um erro inesperado.', [{text: 'OK'}], {
+    Alert.alert("Ooops", "Ocorreu um erro inesperado.", [{ text: "OK" }], {
       cancelable: false,
     });
   };
@@ -159,18 +160,18 @@ class Login extends React.Component {
   }
 
   handleRegisterUser() {
-    this.props.navigation.navigate('RegisterUser');
+    this.props.navigation.navigate("RegisterUser");
   }
 
   handleRecoverAccount() {
-    this.props.navigation.navigate('RecoverAccount');
+    this.props.navigation.navigate("RecoverAccount");
   }
 
   render() {
-    const {fadeAnim} = this.state;
+    const { fadeAnim } = this.state;
 
     return (
-      <Animated.View style={[styles.container, {opacity: fadeAnim}]}>
+      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
         <Image source={images.logos.login} style={styles.image} />
         <LoginForm onSubmit={this.submitFormLogin.bind(this)} />
         <Touch onPress={this.handleRegisterUser.bind(this)}>
@@ -208,7 +209,7 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = ({session, connection, settings}) => ({
+const mapStateToProps = ({ session, connection, settings }) => ({
   session,
   connection,
   settings,

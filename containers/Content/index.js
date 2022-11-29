@@ -1,22 +1,22 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {View, FlatList} from 'react-native';
+import React from "react";
+import { connect } from "react-redux";
+import { View, FlatList } from "react-native";
 
 import {
   ContentItem,
   NoResults,
   NoConnection,
   PDFModal,
-} from '../../config/components';
+} from "../../config/components";
 
-import {contentResetRequest} from '../../actions/contentActions';
+import { contentResetRequest } from "../../actions/contentActions";
 
-import {navigate} from '../../actions/navigateActions';
+import { navigate } from "../../actions/navigateActions";
 
-import styles from './styles';
+import styles from "./styles";
 
 class Content extends React.Component {
-  static navigationOptions = ({navigation}) => ({
+  static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.title,
     headerRight: <View />,
   });
@@ -36,7 +36,8 @@ class Content extends React.Component {
    * @param { Object } item
    * @return { Component } Grid with children
    */
-  renderItem({item}) {
+  renderItem({ item }) {
+    console.log(item);
     return (
       <ContentItem
         onPress={() => this.showDetails(item)}
@@ -75,7 +76,7 @@ class Content extends React.Component {
       this.togglePDFModal(item);
     } else {
       this.props.navigate({
-        routeName: 'ContentDetail',
+        routeName: "ContentDetail",
         params: {
           item,
         },
@@ -84,7 +85,7 @@ class Content extends React.Component {
   }
 
   render() {
-    const {content} = this.props;
+    const { content } = this.props;
 
     return (
       <View style={styles.container}>
@@ -119,7 +120,7 @@ class Content extends React.Component {
   }
 }
 
-const mapStateToProps = ({content, connection}) => ({
+const mapStateToProps = ({ content, connection }) => ({
   content,
   connection,
 });

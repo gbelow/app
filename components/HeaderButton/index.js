@@ -11,7 +11,7 @@ import styles from './styles';
 
 class HeaderButton extends React.Component {
   static propTypes = {
-    onPress: PropTypes.func,
+    onPress: PropTypes.func,    
   };
 
   render() {
@@ -66,7 +66,7 @@ class HeaderButton extends React.Component {
   onPress() {
     if (this.props.navigation) {
       if (this.props.routeName) {
-        this.props.navigation.navigate(this.props.routeName);
+        this.props.navigation.navigate(this.props.routeName, this.props.params);
       } else if (this.props.back) {
         this.props.navigation.goBack();
       }
@@ -87,6 +87,7 @@ HeaderButton.propTypes = {
   iconStyle: PropTypes.any,
   labelStyle: PropTypes.any,
   labelStyleContainer: PropTypes.any,
+  params: PropTypes.any,
 };
 
 HeaderButton.defaultProps = {
@@ -94,6 +95,7 @@ HeaderButton.defaultProps = {
   innerStyle: {},
   back: false,
   iconStyle: {},
+  params: {},
 };
 
 export default HeaderButton;

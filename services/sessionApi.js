@@ -1,5 +1,5 @@
-import {appId} from '../package.json';
-import {request} from './request';
+import { appId } from "../package.json";
+import { request } from "./request";
 
 export function fbLogin(data) {
   return request(
@@ -8,15 +8,16 @@ export function fbLogin(data) {
     },
     {
       hideAlert: true,
-    },
+    }
   );
 }
 
 export function formLogin(data) {
+  console.log("arde", data);
   return request({
-    url: 'kincode/auth/user',
+    url: "kincode/auth/user",
     // url: 'kincode/auth/user',
-    method: 'POST',
+    method: "POST",
     data,
   });
 }
@@ -24,7 +25,7 @@ export function formLogin(data) {
 export function register(data) {
   return request({
     url: `/user?appId=${appId}`,
-    method: 'POST',
+    method: "POST",
     data,
   });
 }
@@ -32,12 +33,12 @@ export function register(data) {
 export function registerUser(data) {
   return request(
     {
-      url: '/user',
-      method: 'POST',
+      url: "/user",
+      method: "POST",
       data,
     },
     {
       timeout: 20000,
-    },
+    }
   );
 }

@@ -5,8 +5,19 @@ import {
   LOGIN_REQUEST_SUCCESS,
   LOGOUT_REQUEST_SUCCESS,
   REGISTER_REQUEST_SUCCESS,
-} from '../config/constants';
+} from "../config/constants";
 
+// const initialState = {
+//   logged: true,
+//   data: {user: {
+//     appId: "amc",
+//     authType: "consistem",
+//     login: "guilherme.below@adapcon.com.br",
+//     password: "@dapcon3G",
+//     termsAccepted: true,
+//     termsVisible: false,
+//   }}
+// }
 const initialState = {
   logged: false,
   data: null,
