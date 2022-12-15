@@ -2,8 +2,6 @@ import {request} from './request';
 import {store} from '../app';
 import axios from 'axios';
 
-// Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA==
-
 export async function getCustomer(email, pass) {
     try{
         return await axios({
@@ -21,64 +19,59 @@ export async function getCustomer(email, pass) {
     }
 }
 
-export async function createCart(basketId){
+export async function createCart({CartName, BasketID, 
+        Favorite, SessionID='', IdVendedor='',  
+        CustomerID='', ShopperTicketID='', CustomerName='', 
+         Email='', PostalCode='', Items=[], WebSiteID=156, Status='', CartID,
+    }){
     try{
         const bask = await axios({
             method: 'post',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho', 
+            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho',
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
             data: {
-                "BasketID": basketId,
-                "CustomerID": 466583,
-                "IdVendedor":"colcci-guilherme.below2@adapcon.com.br",
-
-                "BasketAuthorityToken": "9d9c329e9d40826373432c20bc4cf0b0",
-                "BasketHash": "13a2a905cb57bc6346095a161b19209d",
-                // "BasketID": 1731737,
-                // "CreatedDate": "2022-11-24T14:05:31.9150182-03:00",
-                "CustomerID": 466583,
-                "Email": "marcel@adapcon.com.br",
-                "IdVendedor": "colcci-guilherme.below2@adapcon.com.br",
-                "SessionID": "qd2cy0g4gdh0bqilsgcifn1j",
-                "ShopperTicketID": "317159a2-c48d-4ae0-97d4-1f73f95f4d8f",
-                "WebSiteID": 156,
-                // "itens": [
-                //     {
-                //     "BasketItemID": 3890410,
-                //     "BasketPrice": 129,
-                //     "ProductID": 1024766,
-                //     "Quantity": 1,
-                //     "SKU": "044.01.07941-0-0050-PP",
-                //     "SkuID": 1024767,
-                //     }
-                // ]
+                CartName,
+                BasketID,
+                Favorite,
+                SessionID,
+                IdVendedor,                
+                CustomerID,
+                ShopperTicketID,
+                WebSiteID,
+                Items,
+                CustomerName,                
+                Email,
+                Status,
+                PostalCode,
+                CartID
             },
         })
-        return bask.data.Shopper.Basket
+        return bask.data
 
     }catch(err){
-        console.log(err)
+        console.log(err.response.data)
     }
 }
 
-export async function getCartList(idVendor){
+export async function getCartList({idVendor, CartName}){
+    console.log(`https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?idVendedor=${idVendor}` + (CartName ? `&CartName=[${CartName}` : ''))
     try{
         const list = await axios({
             method: 'get',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?idVendedor='+idVendor,
+            url: `https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?idVendedor=${idVendor}` + (CartName ? `&CartName=[${CartName}` : ''),
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
         }) 
         return list.data
     }catch(err){
-        console.log(err)
+        console.log(err.response.data)
     }
 }
 
-export async function getCart(BasketID){
+export async function getCart(CartID){
     try{
         const list = await axios({
             method: 'get',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?BasketID='+BasketID,
+            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?CartID='+CartID,
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
         }) 
         return list.data
@@ -91,14 +84,68 @@ export async function deleteCart(cartId ){
     try{
         await axios({
             method: 'delete',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho/'+cartId, 
+            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinho?CartID='+cartId, 
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
+        })
+        return 'deleted'
+
+    }catch(err){
+        console.log(err.reponse.data)
+    }
+}
+
+export async function deleteCartItem(itemId ){
+    try{
+        await axios({
+            method: 'delete',
+            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinhoItem?CartItemID='+itemId, 
+            headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
+            data: {}
         })
         return null
 
     }catch(err){
         console.log(err)
     }
+}
+
+export async function deleteItemFromBasket({BasketId, SessionID, CustomerID, BasketItemID, ShopperTicketID}) {
+    
+    try{
+        const resp =  await axios({
+            method: 'post',
+            url: 'https://www.colcci.com.br/web-api/v1/Shopping/Basket/RemoveBasketItem', 
+            headers: {Authorization: 'Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA=='},
+            data: {BasketId, SessionID, CustomerID, BasketItemID, ShopperTicketID},
+        })
+
+        if(resp){
+            return resp
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+    return null
+}
+
+export async function getShippingValue({BasketID, PostalCode}) {
+    try{
+        const resp =  await axios({
+            method: 'post',
+            url: 'https://www.colcci.com.br/web-api/v1/Shopping/Basket/SetPostalCode', 
+            headers: {Authorization: 'Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA=='},
+            data: {BasketID, PostalCode},
+        })
+
+        if(resp){
+            return resp
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+    return null
 }
 
 export async function getBasket(basketId) {
@@ -118,39 +165,55 @@ export async function getBasket(basketId) {
     }
 }
 
-// export async function addItemToCart(basketId, sessionId, products) {
-//     try{
-//         const resp =  await axios({
-//             method: 'post',
-//             url: 'https://www.colcci.com.br/web-api/v1/Shopping/Basket/AddProduct', 
-//             headers: {Authorization: 'Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA=='},
-//             data: {
-//                 "BasketId": basketId,
-//                 "SessionID": sessionId,
-//                 "Products": products 
-//             },
-//         })
-
-//         if(resp){
-//             return resp
-//         }
-
-//     }catch(err){
-//         console.log(err)
-//     }
-//     return null
-// }
-
-export async function addItemToCart(basketId, sessionId, products) {
+export async function addItemToBasket({basketId, sessionId, product}) {
     try{
         const resp =  await axios({
             method: 'post',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinhoItem/', 
-            headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
+            url: 'https://www.colcci.com.br/web-api/v1/Shopping/Basket/AddProduct', 
+            headers: {Authorization: 'Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA=='},
             data: {
                 "BasketId": basketId,
+                "SessionID": 'c1n1rvnq11q14gb23hglzcvp',
                 "SessionID": sessionId,
-                "Products": products 
+                "Products": [product]
+            },
+        })
+        
+        if(resp){
+            if(resp.data.Errors.length > 0){
+                return {error: resp.data.Errors.map(el => el.ErrorMessage)}
+            }else{
+                return resp
+            }
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+    return null
+}
+
+
+
+export async function addItemToCart({BasketID, BasketItemID, SKU, Quantity, SkuID, WebSiteID=156, ProductID, BasketPrice, CartID, ProductColor, ProductSize}) {
+    
+    try{
+        const resp =  await axios({
+            method: 'post',
+            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/carrinhoItem', 
+            headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
+            data: {
+                CartID,
+                WebSiteID,
+                BasketID,
+                BasketItemID,
+                Quantity,
+                BasketPrice,
+                ProductID,
+                SkuID,                
+                SKU,
+                ProductColor,
+                ProductSize,
             },
         })
 
@@ -159,10 +222,12 @@ export async function addItemToCart(basketId, sessionId, products) {
         }
 
     }catch(err){
-        console.log(err)
+        console.log(err.response.data)
     }
     return null
 }
+
+
 
 export async function checkoutRedirect(basketId, sessionId, customerId) {
     try{
@@ -183,59 +248,61 @@ export async function checkoutRedirect(basketId, sessionId, customerId) {
     return null
 }
 
-export async function createCustomer() {
+export async function createCustomer({Email, Password, Name, Sex, Surname, CPF, Birthdate, Phone}) {
     try{
-        return await axios({
+        const resp = await axios({
             method: 'post',
             url: 'https://www.colcci.com.br/web-api/v1/Profile/Account/Register', 
             headers: {Authorization: 'Basic aW50ZWdyYWNhb2VycDpBbWMuMjAyMA=='},
             data: {
-                "Email": "webchu@gmail.com",
-                "Password": "123",     
-                'Name': 'afksdj',
-                "gender": 'M',
-                "Phone": '(47)988021634',
-                "Surname": "pikachu",
-                "CPF": "8765674564",
-                'BirthDate': "20/09/1992",
+                "Email": Email,
+                "Password": Password,     
+                'Name': Name,
+                "Gender": Sex,
+                "Phone": Phone,
+                "Surname": Surname,
+                "CPF": CPF,
+                'BirthDate': Birthdate,
             },
         })
+        return resp
 
     }catch(err){
         console.log(err)
     }
 }
 
-export async function getCustomerList(canal) {
+export async function getCustomerList({Canal='Colcci', name=''}) {
     try{
         const resp = await axios({
             method: 'get',
-            url: 'https://apihub.amctextil.com.br/api/v1/ecommerce/model/clientes', 
+            url: `https://apihub.amctextil.com.br/api/v1/ecommerce/model/clientes?Canal=${Canal}` + (name ? `&nome=[${name}` : ''), 
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},         
         })
+        
         return resp.data
     }catch(err){
         console.log(err)
     }
 }
 
-export async function searchProduct(filtro='VESTIDO', numeroProdutos = 10,codLoja=22) {
+export async function searchProduct({filter='VESTIDO', numeroProdutos = 10, codLoja=2, lastId}) {
     try{
-        resp =  await axios({
+        const resp =  await axios({
             method: 'get',
             url: `https://apihub.amctextil.com.br/api/v1/ecommerce/model/consultaProdutos`, 
-            // url: `https://apihub.amctextil.com.br/api/v1/ecommerce/model/consultaProdutos?descricaoFiltro=${filtro}&numeroProdutos=${numeroProdutos}&codLoja=${codLoja}`, 
             headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},
             params: {
-                descricaoFiltro:filtro,
+                descricaoFiltro:filter,
                 numeroProdutos:numeroProdutos,
                 codLoja:codLoja,
+                lastId,
             }
         })
         
         return resp.data
 
     }catch(err){
-        console.log(err, 'myerrrooor')
+        console.log(err.response.data)
     }
 }

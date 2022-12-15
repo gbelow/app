@@ -14,53 +14,71 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
   },
-  settingsButtonContainer: {
-    paddingTop: theme.gutter,
+
+  dropdown_2: {
+    alignSelf: 'flex-end',
+    width: 80,
+    margin: 5,
+    right: 8,
+    borderWidth: 0,
+    borderRadius: 3,
+    backgroundColor: 'white',
+    textAlign:'center',
+    paddingVertical: 10,
+    
   },
-  headerLeftImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: Dimensions.get("window").width / 2.2,
+  dropdown_2_text: {
+    fontSize: 16,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    width:'100%',
+    height: 40,
   },
-  footerRightImage: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: Dimensions.get("window").width / 2.2,
+  dropdown_2_dropdown: {
+    width: 80,
+    borderColor: 'gray',
+    borderRadius: 3,
   },
-  headerFullImage: {
-    position: "absolute",
-    top: 0,
-    width: Dimensions.get("window").width,
+  dropdown_2_row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  footerFullImage: {
-    position: "absolute",
-    bottom: 0,
-    width: Dimensions.get("window").width,
+  dropdown_2_image: {
+    marginLeft: 4,
+    width: 30,
+    height: 30,
   },
-  registerText: {
-    fontSize: theme.smallFontSize,
-    color: theme.noLoginTextColor,
-    paddingBottom: theme.gutter * 2,
+  dropdown_2_row_text: {
+    marginHorizontal: 4,
+    fontSize: 16,
+    color: 'navy',
+    textAlignVertical: 'center',
   },
-  fbLabel: {
-    fontSize: theme.extraSmallFontSize,
-    color: theme.fbButtonColor,
-    textAlign: "center",
+  dropdown_2_separator: {
+    height: 1,
+    backgroundColor: 'cornflowerblue',
   },
-  noLoginContainer: {
-    flexDirection: "row",
+  // centeredView: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   marginTop: 22
+  // },
+  modalView: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#222',
+    // borderRadius: 20,
+    padding: 15,
     alignItems: "center",
-    justifyContent: "center",
-    borderTopWidth: 2,
-    borderColor: theme.greyLight,
-    paddingVertical: theme.gutter / 2,
-    marginTop: theme.gutter / 2,
-  },
-  noLoginText: {
-    fontSize: theme.smallFontSize,
-    color: theme.noLoginTextColor,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
 });
 

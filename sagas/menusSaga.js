@@ -115,7 +115,7 @@ const fetchPublic = function* () {
     side.push(test);
     grid.push(test);
     both.push(test);
-
+    
     request.response.data.map((item) => {
       if (item.type === "content") {
         item.routeName = "Content";

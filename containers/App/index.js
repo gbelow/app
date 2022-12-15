@@ -8,6 +8,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {ScreenLoading} from 'react-native-kin-ui';
 
 import {addNavigationHelpers} from 'react-navigation';
+import FlashMessage from 'react-native-flash-message';
 
 import {RootNav} from '../../config/router';
 
@@ -77,6 +78,7 @@ class App extends React.Component {
       <View style={styles.container}>
         <RootNav navigation={navigation} />
         {activity.visibility && <ScreenLoading />}
+        <FlashMessage position="top" />
       </View>
     );
   }
