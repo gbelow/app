@@ -134,8 +134,8 @@ class Sales extends React.Component {
   }
 
   renderCartListItem(cart) {
-    const {Email, Status, Items, BasketID, CartName, CustomerName, CartID, WebSiteID, IdVendedor} = cart.item
-
+    const {Email, Status, Items, BasketID, CartName, CustomerName, CartID, WebSiteID, IdVendedor, updatedAt} = cart.item
+    
     const handleBuyButtonClick = async () => {
       this.props.navigation.navigate("NewCart", {cart: cart.item})
     }
@@ -187,7 +187,7 @@ class Sales extends React.Component {
         <View
           style={{
             width: "100%",
-            flexDirection: "row",
+            flexDirection: "column",
             paddingVertical: 5,
             backgroundColor: 'white',
             justifyContent: "space-between",
@@ -196,35 +196,28 @@ class Sales extends React.Component {
             borderRadius: 5,
           }}
         >
-          <View style={{width: '80%'}}>
-            <View style={{flexDirection: 'row', }}>
-              <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 18, marginRight: 5 }}>{CartName}</Text>
-              <Touch onPress={handleEditCartName} >
-                <Icon name="pencil" color={'#000'}  size={14} style={{alignSelf: 'flex-end', borderRadius: 5, marginVertical: 3}}  />
-              </Touch>
+          <Touch>
+            <View >
+              <View style={{flexDirection: 'row', }}>
+                <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 18, marginRight: 5 }}>{CartName}</Text>
+                <Touch onPress={handleEditCartName} >
+                  <Icon name="pencil" color={'#000'}  size={14} style={{alignSelf: 'flex-end', borderRadius: 5, marginVertical: 3}}  />
+                </Touch>
+              </View>
+              <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 12 }}>{Email}</Text>
+              <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 12 }}>{CustomerName}</Text>
+              <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 12 }}>BasketID: {BasketID}</Text>
+              <Text style={{ color: `green`, fontWeight: 'bold', fontSize: 14 }}>R$ {formatCurrency(this.calculateCartTotal(cart.item))}</Text>
+              <Text style={{ color: Status === 'Aberto' ? `green` : 'red', fontWeight: 'bold', fontSize: 14  }}>{Status}</Text>
             </View>
-            <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 18 }}>{Email}</Text>
-            <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 18 }}>{CustomerName}</Text>
-            <Text style={{ color: `black`, fontWeight: 'bold', fontSize: 18 }}>BasketID: {BasketID}</Text>
-            <Text style={{ color: `green`, fontWeight: 'bold', fontSize: 20 }}>R$ {formatCurrency(this.calculateCartTotal(cart.item))}</Text>
-            <Text style={{ color: Status === 'Aberto' ? `green` : 'red', fontWeight: 'bold', fontSize: 20  }}>{Status}</Text>
-          </View>
-          <View style={{width: '20%'}}>
-            <Touch onPress={handleBuyButtonClick.bind(this)} >
-              <Icon name="shopping-cart" color={'#000'}  size={18} style={{alignSelf: 'flex-end', backgroundColor: '#F9C600', padding: 10, borderRadius: 1000, borderWidth: 1, marginVertical: 3}}  />
-            </Touch>
-            <Touch onPress={handleCartFinishClick.bind(this)}>
-              <Icon name="credit-card-alt" color={'#000'}  size={18} style={{alignSelf: 'flex-end', backgroundColor: '#F9C600', padding: 10, borderRadius: 1000, borderWidth: 1, marginVertical: 3}}  />
-            </Touch>
-            <Touch onPress={handleCartDeleteClick.bind(this)}>
-              <Icon name="trash" color={'#000'}  size={18} style={{alignSelf: 'flex-end', backgroundColor: '#F9C600', padding: 10, borderRadius: 1000, borderWidth: 1, marginVertical: 3}}  />
-            </Touch>
-            <Touch onPress={handleAddCustomer.bind(this)}>
-              <Icon name="user-plus" color={'#000'}  size={18} style={{alignSelf: 'flex-end', backgroundColor: '#F9C600', padding: 10, borderRadius: 1000, borderWidth: 1, marginVertical: 3}}  />
-            </Touch>
-            <Touch onPress={handleCloneCart.bind(this)}>
-              <Icon name="copy" color={'#000'}  size={18} style={{alignSelf: 'flex-end', backgroundColor: '#F9C600', padding: 10, borderRadius: 1000, borderWidth: 1, marginVertical: 3}}  />
-            </Touch>
+          </Touch>
+          <View style={{flexDirection:'row', justifyContent: 'space-around', marginTop: 10}}>
+            <IconBtn handleFunc={handleBuyButtonClick.bind(this)} icon={'shopping-cart'} />
+            <IconBtn handleFunc={handleCartFinishClick.bind(this)} icon={'credit-card-alt'} />
+            <IconBtn handleFunc={handleCartDeleteClick.bind(this)} icon={'trash'} />
+            <IconBtn handleFunc={handleAddCustomer.bind(this)} icon={'user-plus'} />
+            <IconBtn handleFunc={handleCloneCart.bind(this)} icon={'copy'} />
+            
           </View>
         </View>
     );
@@ -301,8 +294,9 @@ class Sales extends React.Component {
             />    
           </View>
           <FlatList
-            data={this.state.filteredCarts}
-            renderItem={this.renderCartListItem.bind(this)}
+            data={this.state.filteredCarts.sort((a,b) => (a.updatedAt) < (b.updatedAt))}
+            renderItem={this.renderCartListItem.bind(this)} 
+
             keyExtractor={(item, index) => index}              
             scrollEnabled={true}
             numColumns={1}
@@ -329,6 +323,23 @@ class Btn extends React.Component {
               </View>
           </Touch>
       )
+  }
+}
+
+class IconBtn extends React.Component {
+  constructor() {
+    super()
+
+  }
+  render(){
+    const {handleFunc, icon} = this.props 
+    return(
+      <Touch onPress={handleFunc}>
+        <View style={styles.icon}>
+          <Icon name={icon} color={'#000'}  size={18}  />
+        </View>
+      </Touch>
+    )
   }
 }
 

@@ -67,8 +67,10 @@ class CartDetails extends React.Component {
   }
   
   async updateCart() {
-    const  cart = await getCart(this.state.cartId)    
-    this.setState({cart: cart.data[0]})
+    let  cart = await getCart(this.state.cartId)   
+    
+    cart = {...cart.data[0], Items: cart.data[0].Items.filter(el => el!= null)} 
+    this.setState({cart})
   }
 
   async handleFinish(){
@@ -149,7 +151,6 @@ class CartDetails extends React.Component {
   handleImageClick(image) {
     return(
       () => {
-        console.log(image)
         this.setState({modalImage: image})
 
       }
@@ -178,11 +179,13 @@ class CartDetails extends React.Component {
         </Touch>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '80%'}}>
           <View style={{marginLeft: 5, width: '80%'}}>
-            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 16 }}>{ProductName} </Text>
-            <Text style={{ color: `green`, fontWeight: 'bold', fontSize: 16 }}> R$ {BasketPrice}</Text>
-            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 16 }}>Qtd: {Quantity}</Text>
-            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 16 }}>Tamanho: {ProductSize}</Text>
-            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 16 }}>Cor: {ProductColor}</Text>
+            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 12 }}>{ProductName} </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{ color: `green`, fontWeight: 'bold', fontSize: 12, paddingRight: 20 }}> R$ {BasketPrice}</Text>
+              <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 12, paddingRight: 20 }}>Qtd: {Quantity}</Text>
+            </View>
+            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 12 }}>Tamanho: {ProductSize}</Text>
+            <Text style={{ color: `white`, fontWeight: 'bold', fontSize: 12 }}>Cor: {ProductColor}</Text>
           </View>
           <View style={{ width: '20%'}}>
             <Touch onPress={(() => this.handleDeleteClick(product)).bind(this)}>
@@ -202,7 +205,7 @@ class CartDetails extends React.Component {
 
   render() {
     const {CustomerName, BasketID, PostalCode, Items, CartName} = this.state.cart
-    // console.log(this.state.cart, 'cartolinha')
+    // console.log(Items)
     return (
       <View style={styles.container}>
         <View style={{  width: "90%", height: '10%' }}>
@@ -214,7 +217,7 @@ class CartDetails extends React.Component {
         <View>          
           <View style={{ width: '90%', height: '85%', paddingVertical: 10}}>
             <FlatList
-              data={Items}
+              data={Items?.sort((a,b) => (a.updatedAt) < (b.updatedAt))}
               renderItem={this.renderProductsItem.bind(this)}
               keyExtractor={(item, index) => index}
               numColumns={1}
@@ -228,7 +231,7 @@ class CartDetails extends React.Component {
                 <Text style={{fontSize: 16, color: '#000'}}>CEP para entrega: {PostalCode}</Text>
             </View>
           </Touch>
-          <Text style={{color: 'white', fontSize: 20, marginLeft: 15, marginBottom: 5}}>Preço total: R$ {formatCurrency( Items?.reduce((acc, el) => parseFloat(el.BasketPrice) + acc, 0) ?? 0 )}            
+          <Text style={{color: 'white', fontSize: 20, marginLeft: 15, marginBottom: 5}}>Preço total: R$ {formatCurrency( Items?.reduce((acc, el) => parseFloat(el?.BasketPrice ?? 0) + acc, 0) ?? 0 )}            
           </Text>
           <Button label="Finalizar" onPress={this.handleFinish} />
         </View>
@@ -282,6 +285,9 @@ class CartDetails extends React.Component {
             <View style={styles.modalView}>
               <Touch onPress={() => this.setState({modalImage: {} })}  >
                 <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
+                  {this.state.modalImage.referenciaEditada}
+                </Text>
+                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
                   {this.state.modalImage.ProductName}
                 </Text>
                 <Image
@@ -290,18 +296,22 @@ class CartDetails extends React.Component {
                   }}
                   style={{width: 300, height: 400, margin: 0, borderRadius: 5, borderWidth: 2}}
                   />
-                  <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                    Quantidade: {this.state.modalImage.Quantity}
+                  <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 12}}>
+                      Quantidade: {this.state.modalImage.Quantity}
+                    </Text>
+                    <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 12}}>
+                      Tamanho: {this.state.modalImage.ProductSize}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 12}}>
+                      Cor: {this.state.modalImage.ProductColor}
+                    </Text>
+                    <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 12}}>
+                      Preço: {this.state.modalImage.BasketPrice}
                   </Text>
-                  <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                    Tamanho: {this.state.modalImage.ProductSize}
-                  </Text>
-                  <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                    Cor: {this.state.modalImage.ProductColor}
-                  </Text>
-                  <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                    Preço: {this.state.modalImage.BasketPrice}
-                </Text>
+                  </View>
               </Touch>
             </View>
           :

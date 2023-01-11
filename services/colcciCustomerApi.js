@@ -272,12 +272,15 @@ export async function createCustomer({Email, Password, Name, Sex, Surname, CPF, 
     }
 }
 
-export async function getCustomerList({Canal='Colcci', name=''}) {
+export async function getCustomerList({Canal='Colcci', name='', count=10, lastId, numeroClientes}) {
     try{
         const resp = await axios({
             method: 'get',
             url: `https://apihub.amctextil.com.br/api/v1/ecommerce/model/clientes?Canal=${Canal}` + (name ? `&nome=[${name}` : ''), 
-            headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},         
+            headers: {Authorization: 'Basic YWRhcGNvbjphZHAwNjc='},    
+            params: {
+                count
+            }     
         })
         
         return resp.data

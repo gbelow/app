@@ -83,6 +83,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5
   },
+  icon: {
+    alignSelf: 'flex-end', 
+    textAlign: 'center', 
+    display:'flex', 
+    alignItems: 'center', 
+    alignContent: 'center',
+    justifyContent: 'center',  
+    backgroundColor: '#F9C600',
+    width: 40, 
+    height: 40, 
+    borderRadius: 1000, 
+    borderWidth: 1, 
+    marginVertical: 3
+  }
 });
 
 

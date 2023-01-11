@@ -97,6 +97,7 @@ class NewCart extends React.Component {
   }
 
   handleItemClick(item, index) {
+    console.log(item)
     return(
       () => this.setState({productList: this.state.productList.map((el, i)=> i===index ? {...el, isSelected: !el.isSelected} : el )})    
     )
@@ -348,6 +349,7 @@ class NewCart extends React.Component {
   }
 
   render() {
+    console.log(this.state.modalImage)
     const { CartName, CustomerName} = this.state.cart
     console.log(this.state.productList)
     return (
@@ -414,32 +416,34 @@ class NewCart extends React.Component {
           Object.keys(this.state.modalImage).length > 0 ? 
             <View style={styles.modalView}>
               <Touch onPress={() => this.setState({modalImage: {} })}  >
-                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                  {this.state.modalImage.nome}
-                </Text>
-                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
+                <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 16}}>
                   {this.state.modalImage.referenciaEditada}
+                </Text>
+                <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 16}}>
+                  {this.state.modalImage.nome}
                 </Text>
                 <Image
                   source={{
                     uri: this.state.modalImage ? this.state.modalImage.estoque[0]?.midias[0] : '',
                   }}
                   style={{width: 300, height: 400, margin: 0, borderRadius: 5, borderWidth: 2}}
-                  />
-                  <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
+                />
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 12}}>
+                    Preço original: R${this.state.modalImage.precoOriginal}
+                  </Text>
+                  <Text style={{color:'green', marginVertical: 2, fontWeight: 'bold', fontSize: 12}}>
+                  Preço na promoção: R$ {this.state.modalImage.precoAtualPromocao ?? '-'}
+                  </Text>
+                </View>
+                  <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 12}}>
                   {this.state.modalImage ? this.state.modalImage.estoque[0]?.base : ''}
                 </Text>
-                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
+                <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 12}}>
                   {this.state.modalImage ? this.state.modalImage.estoque[0]?.tecido : ''}
                 </Text>
-                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
+                <Text style={{color:'#fff', marginVertical: 2, fontWeight: 'bold', fontSize: 12}}>
                   {this.state.modalImage ? (this.state.modalImage.estoque[0]?.composicao || this.state.modalImage.estoque[0]?.composição ) : ''}
-                </Text>
-                <Text style={{color:'#fff', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                  Preço original: {this.state.modalImage.precoOriginal}
-                </Text>
-                <Text style={{color:'green', marginVertical: 5, fontWeight: 'bold', fontSize: 16}}>
-                Preço na promoção: {this.state.modalImage.precoAtualPromocao}
                 </Text>
               </Touch>
             </View>
